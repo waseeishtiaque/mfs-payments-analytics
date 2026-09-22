@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "8f5bf1dedfaf08b8ca94",
+  "position": {
+    "x": 0,
+    "y": 280.7361963190184,
+    "z": 3,
+    "height": 281,
+    "width": 280,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "Velocity Flagged Users"
+                }
+              },
+              "queryRef": "transactions.Velocity Flagged Users",
+              "nativeQueryRef": "Velocity Flagged Users"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "transactions"
+                  }
+                },
+                "Property": "Velocity Flagged Users"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "5ad17c6715434640bbfc",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "Velocity Flagged Users"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

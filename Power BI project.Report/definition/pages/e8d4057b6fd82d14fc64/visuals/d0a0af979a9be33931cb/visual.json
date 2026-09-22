@@ -1,0 +1,129 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "d0a0af979a9be33931cb",
+  "position": {
+    "x": 279.75460122699383,
+    "y": 280.7361963190184,
+    "z": 4,
+    "height": 280.7361963190184,
+    "width": 480.98159509202452,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "user_id"
+                }
+              },
+              "queryRef": "transactions.user_id",
+              "nativeQueryRef": "user_id"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "User Max Fraud Score"
+                }
+              },
+              "queryRef": "transactions.User Max Fraud Score",
+              "nativeQueryRef": "User Max Fraud Score"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "Is Flagged User"
+                }
+              },
+              "queryRef": "transactions.Is Flagged User",
+              "nativeQueryRef": "Is Flagged User"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "transactions"
+                  }
+                },
+                "Property": "User Max Fraud Score"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "6b1c51a948fda0a7f24c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "user_id"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "7c81877229a4bf0b3b16",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "User Max Fraud Score"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "ef336bb8ecb4ca23dd4c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "Is Flagged User"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

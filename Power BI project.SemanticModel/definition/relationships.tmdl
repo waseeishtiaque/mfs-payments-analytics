@@ -1,0 +1,14 @@
+relationship c387a7a3-f2f8-4203-8c31-ae9c197ed08d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: transactions.timestamp
+	toColumn: LocalDateTable_078f6241-4235-484b-82d6-091ad19961fc.Date
+
+relationship 27c0b04c-8f8c-6f3f-2f7a-b998fe33f400
+	fromColumn: transactions.TxnDate
+	toColumn: DateTable.Date
+
+relationship 0aa36496-43aa-4e78-822e-871b4080e2ef
+	joinOnDateBehavior: datePartOnly
+	fromColumn: transactions.CohortMonth
+	toColumn: LocalDateTable_795d0f03-855d-46ea-aed1-72fba89ac2ee.Date
+

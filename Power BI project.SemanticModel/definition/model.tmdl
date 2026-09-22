@@ -1,0 +1,24 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["transactions","fraud_labels"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table transactions
+ref table DateTableTemplate_aaf338ae-9fc6-492a-b2bf-29916f0b3b67
+ref table LocalDateTable_078f6241-4235-484b-82d6-091ad19961fc
+ref table DateTable
+ref table LocalDateTable_795d0f03-855d-46ea-aed1-72fba89ac2ee
+ref table fraud_labels
+
+ref cultureInfo en-US
+

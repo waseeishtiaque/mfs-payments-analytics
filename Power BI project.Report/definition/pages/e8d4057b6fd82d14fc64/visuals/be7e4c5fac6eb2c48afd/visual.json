@@ -1,0 +1,102 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "be7e4c5fac6eb2c48afd",
+  "position": {
+    "x": 760.7361963190184,
+    "y": 280.7361963190184,
+    "z": 5,
+    "height": 280.7361963190184,
+    "width": 523.19018404907968,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DateTable"
+                    }
+                  },
+                  "Property": "Users Score 2plus"
+                }
+              },
+              "queryRef": "DateTable.Users Score 2plus",
+              "nativeQueryRef": "Users Score 2plus"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "Users Score 3"
+                }
+              },
+              "queryRef": "transactions.Users Score 3",
+              "nativeQueryRef": "Users Score 3"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "DateTable"
+                  }
+                },
+                "Property": "Users Score 2plus"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "78c2707d531ce78b7055",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DateTable"
+              }
+            },
+            "Property": "Users Score 2plus"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8392096764f7b8605a4c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "Users Score 3"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

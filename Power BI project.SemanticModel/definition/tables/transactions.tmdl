@@ -1,0 +1,264 @@
+table transactions
+	lineageTag: 7778c103-be14-4b83-b09c-2906f415c96f
+
+	measure 'Retention %' = ```
+			
+			VAR CohortSize = 
+			    CALCULATE(
+			        DISTINCTCOUNT(transactions[user_id]),
+			        ALL(transactions[MonthsSinceFirst])
+			    )
+			RETURN DIVIDE(DISTINCTCOUNT(transactions[user_id]), CohortSize)
+			```
+		lineageTag: 0ff75e90-d122-4b8f-850a-220d37bd0998
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Velocity Flagged Users' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(transactions[user_id]),
+			    transactions[FlagVelocity] = 1
+			)
+		formatString: 0
+		lineageTag: c3ccec06-97da-4437-b225-4cdd7ac78dee
+
+	measure 'User Max Fraud Score' = MAX(transactions[FraudScore])
+		formatString: 0
+		lineageTag: 162b4652-c9c8-4b68-8342-23ef5ea1cfc0
+
+	measure 'Users Score 3' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(transactions[user_id]),
+			    FILTER(
+			        VALUES(transactions[user_id]),
+			        CALCULATE(MAX(transactions[FraudScore])) >= 3
+			    )
+			)
+		formatString: 0
+		lineageTag: 60a63097-8695-43c1-b43a-f30b4ce7a501
+
+	measure 'Is Flagged User' =
+			
+			IF(CALCULATE(MAX(transactions[FraudScore])) >= 2, 1, 0)
+		formatString: 0
+		lineageTag: 59bd5fba-dd5d-48b9-9b1e-c1fbf85e1027
+
+	measure 'True Positives' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(transactions[user_id]),
+			    FILTER(
+			        VALUES(transactions[user_id]),
+			        CALCULATE(MAX(transactions[FraudScore])) >= 2
+			            && transactions[user_id] IN VALUES(fraud_labels[user_id])
+			    )
+			)
+		lineageTag: 5bc4be1b-cdef-4157-89ae-c0fad88079f0
+
+	measure Recall = DIVIDE([True Positives], COUNTROWS(fraud_labels))
+		lineageTag: 4dc3c164-7f17-45b2-84bb-a8979b749186
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Precision = DIVIDE([True Positives], [Users Score 2plus])
+		lineageTag: ddf6aa65-2922-421f-a087-6310a12aabc0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column txn_id
+		dataType: string
+		lineageTag: 793acc85-3dee-4045-b576-06f97495034e
+		summarizeBy: none
+		sourceColumn: txn_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column user_id
+		dataType: string
+		lineageTag: 64232f2d-005a-4c35-889b-2d876779440e
+		summarizeBy: none
+		sourceColumn: user_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c606bccb-4eed-454b-b72f-95a7fa3caf4e
+		summarizeBy: none
+		sourceColumn: timestamp
+
+		variation Variation
+			isDefault
+			relationship: c387a7a3-f2f8-4203-8c31-ae9c197ed08d
+			defaultHierarchy: LocalDateTable_078f6241-4235-484b-82d6-091ad19961fc.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount
+		dataType: double
+		lineageTag: 0454d06c-2284-4695-a353-9c22e8ac5755
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column txn_type
+		dataType: string
+		lineageTag: a4773c0d-088f-41b9-8109-8a3562e3c857
+		summarizeBy: none
+		sourceColumn: txn_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column agent_id
+		dataType: string
+		lineageTag: ffafb1b1-16d0-404f-bed0-06d4dea657d1
+		summarizeBy: none
+		sourceColumn: agent_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 495db3de-0545-4338-9b65-35a9b64b5fdf
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: d03dd94e-8ae1-4c6f-a681-759a0861d2a9
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column TxnDate = DATEVALUE(transactions[timestamp])
+		formatString: General Date
+		lineageTag: d81e061c-68c1-4b73-8134-f7a1d136470f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column CohortMonth = ```
+			
+			VAR FirstTxn = 
+			    CALCULATE(
+			        MIN(transactions[TxnDate]),
+			        ALLEXCEPT(transactions, transactions[user_id])
+			    )
+			RETURN EOMONTH(FirstTxn, -1) + 1
+			```
+		formatString: General Date
+		lineageTag: 4ecbcd93-0994-496a-a1f4-c6ca1b2c544a
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 0aa36496-43aa-4e78-822e-871b4080e2ef
+			defaultHierarchy: LocalDateTable_795d0f03-855d-46ea-aed1-72fba89ac2ee.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthsSinceFirst =
+			
+			DATEDIFF(
+			    transactions[CohortMonth],
+			    EOMONTH(transactions[TxnDate], -1) + 1,
+			    MONTH
+			)
+		formatString: 0
+		lineageTag: 66979f83-cd77-4759-9739-9fccfa359ed3
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column CohortLabel = FORMAT(transactions[CohortMonth], "YYYY-MM")
+		lineageTag: 97a31bc6-9073-46ad-9709-93705b1f15b8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column UserHour = transactions[user_id] & "|" & FORMAT(transactions[timestamp], "YYYY-MM-DD HH")
+		lineageTag: d9831674-ae62-4701-abde-b83362b8d7c7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column TxnsInThisHour =
+			
+			CALCULATE(
+			    COUNTROWS(transactions),
+			    ALLEXCEPT(transactions, transactions[UserHour])
+			)
+		formatString: 0
+		lineageTag: 5da60b54-9c5e-47a4-a908-358fd0345618
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column FlagVelocity = IF(transactions[TxnsInThisHour] >= 6, 1, 0)
+		formatString: 0
+		lineageTag: 328a15ca-1e4d-4b17-9fcc-9975b0e99e2a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column FlagStructuring = ```
+			
+			VAR Amt = transactions[amount]
+			VAR NearThreshold = 
+			    (Amt >= 9200 && Amt < 10000) ||
+			    (Amt >= 24200 && Amt < 25000) ||
+			    (Amt >= 49200 && Amt < 50000) ||
+			    (Amt >= 99200 && Amt < 100000)
+			RETURN IF(NearThreshold, 1, 0)
+			```
+		formatString: 0
+		lineageTag: 77a437e1-6ab4-46ee-873e-4d1a1956aed7
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column FlagOddHour =
+			
+			VAR Hr = HOUR(transactions[timestamp])
+			RETURN IF(Hr >= 1 && Hr <= 5, 1, 0)
+		formatString: 0
+		lineageTag: 3eb12b21-4410-4bd6-a857-a9545d5ee6eb
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column FraudScore = ```
+			
+			transactions[FlagVelocity] + 
+			transactions[FlagStructuring] + 
+			transactions[FlagOddHour]
+			```
+		formatString: 0
+		lineageTag: e9e7f73d-8099-4d2a-974d-d538e5668f8f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition transactions = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("E:\Excel\Generate data\data\transactions.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"txn_id", type text}, {"user_id", type text}, {"timestamp", type datetime}, {"amount", type number}, {"txn_type", type text}, {"agent_id", type text}, {"channel", type text}, {"status", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

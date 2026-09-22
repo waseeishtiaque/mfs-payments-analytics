@@ -1,0 +1,190 @@
+table DateTable
+	lineageTag: 86f9be36-be07-475f-bfd5-eb1087c99e82
+	dataCategory: Time
+
+	measure 'Total Volume' = SUM(transactions[amount])
+		lineageTag: f2427c4b-5240-4ef2-afdc-b2fd70b963e0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Transaction Count' = COUNTROWS(transactions)
+		formatString: 0
+		lineageTag: 416261a8-4c07-4069-875d-cfc15e734c9f
+
+	measure 'Active Users' = DISTINCTCOUNT(transactions[user_id])
+		formatString: 0
+		lineageTag: e6a18756-9c46-46db-acb2-5fe67291af0e
+
+	measure 'Avg Ticket Size' = DIVIDE([Total Volume], [Transaction Count])
+		lineageTag: cc4ede44-396b-4931-b67b-8fa4b600aeff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Success Rate' =
+			
+			DIVIDE(
+			    CALCULATE([Transaction Count], transactions[status] = "success"),
+			    [Transaction Count]
+			)
+		lineageTag: 461254bd-015c-44b8-b465-9edd70febd88
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Take Rate Revenue' = [Total Volume] * 0.0185
+		lineageTag: 61ef8e81-9e57-4446-9045-2ed3212e8d35
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume MoM %' =
+			
+			VAR CurrVol = [Total Volume]
+			VAR PrevVol = CALCULATE([Total Volume], DATEADD(DateTable[Date], -1, MONTH))
+			RETURN DIVIDE(CurrVol - PrevVol, PrevVol)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 57672552-87b9-4f4a-9586-e1cd9c806d9c
+
+	measure 'Volume Rolling 3M' =
+			
+			CALCULATE(
+			    [Total Volume],
+			    DATESINPERIOD(DateTable[Date], MAX(DateTable[Date]), -3, MONTH)
+			)
+		lineageTag: 163e8298-2547-4ce4-a7eb-2488da62bc25
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume YTD' = TOTALYTD([Total Volume], DateTable[Date])
+		lineageTag: aea59576-6b06-4a1a-85e8-a867eeaf31ae
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Users Score 2plus' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(transactions[user_id]),
+			    FILTER(
+			        VALUES(transactions[user_id]),
+			        CALCULATE(MAX(transactions[FraudScore])) >= 2
+			    )
+			)
+		formatString: 0
+		lineageTag: 5bd1dac1-a79e-47bf-a0c7-8ec166223086
+
+	measure 'Velocity Flags' = CALCULATE(COUNTROWS(transactions), transactions[FlagVelocity] = 1)
+		formatString: 0
+		lineageTag: f653ec66-3e5a-4599-90f6-be1dea4ce82e
+
+	measure 'Structuring Flags' = CALCULATE(COUNTROWS(transactions), transactions[FlagStructuring] = 1)
+		formatString: 0
+		lineageTag: 23cf5f00-370e-4531-b5b3-fa2fdc8d8f62
+
+	measure 'Odd Hour Flags' = CALCULATE(COUNTROWS(transactions), transactions[FlagOddHour] = 1)
+		formatString: 0
+		lineageTag: 6777094f-70a2-41d9-b065-00c85842f8f7
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: 037ec3ad-20c9-4eac-b7be-49861ec67528
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 83d0fe3b-4962-4d85-86c9-03bae31f44e7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		formatString: 0
+		lineageTag: ae575dae-653a-4d0b-91f6-f41b4d74a682
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		lineageTag: 4c8fc0e3-8a16-4a0b-bcdb-75be0f5e8a50
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthName]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		lineageTag: 7f702466-9ea0-435e-a671-c44bf9948c2e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 840cc77e-2560-44f4-82c7-a34e922c846c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfMonth
+		formatString: 0
+		lineageTag: a910fef0-b56d-46d7-bca6-9f25fdd5d8e5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weekday
+		lineageTag: 6693b944-4a1b-48c5-9f08-8993c5566bb3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Weekday]
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekdayNum
+		formatString: 0
+		lineageTag: d33a6074-8c28-49e3-affa-3c32dba3b492
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [WeekdayNum]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWeekend
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8fededc8-c95e-4a8c-bc85-b7fce9c129f2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IsWeekend]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DateTable = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    CALENDAR(DATE(2025,1,1), DATE(2026,6,30)),
+				    "Year", YEAR([Date]),
+				    "Month", MONTH([Date]),
+				    "MonthName", FORMAT([Date], "MMM"),
+				    "YearMonth", FORMAT([Date], "YYYY-MM"),
+				    "Quarter", "Q" & QUARTER([Date]),
+				    "DayOfMonth", DAY([Date]),
+				    "Weekday", FORMAT([Date], "ddd"),
+				    "WeekdayNum", WEEKDAY([Date], 2),
+				    "IsWeekend", IF(WEEKDAY([Date], 2) = 5, TRUE(), FALSE())
+				)
+
+	annotation PBI_Id = 0bb3f7d1f4cf44aea751911eff5caeb1
+

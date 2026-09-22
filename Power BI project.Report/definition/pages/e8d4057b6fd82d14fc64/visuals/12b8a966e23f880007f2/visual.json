@@ -1,0 +1,130 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "12b8a966e23f880007f2",
+  "position": {
+    "x": 0,
+    "y": 572.2699386503067,
+    "z": 6,
+    "height": 280.7361963190184,
+    "width": 557.54601226993861,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "True Positives"
+                }
+              },
+              "queryRef": "transactions.True Positives",
+              "nativeQueryRef": "True Positives"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "Recall"
+                }
+              },
+              "queryRef": "transactions.Recall",
+              "nativeQueryRef": "Recall"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "transactions"
+                    }
+                  },
+                  "Property": "Precision"
+                }
+              },
+              "queryRef": "transactions.Precision",
+              "nativeQueryRef": "Precision"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "transactions"
+                  }
+                },
+                "Property": "True Positives"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b68676a30a82baff97a4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "True Positives"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "28995e1cb4eef554c4e9",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "Recall"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "26a0c50f202ef6ab80c9",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "transactions"
+              }
+            },
+            "Property": "Precision"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
