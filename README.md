@@ -12,9 +12,9 @@ contribution margin.
 
 ## Dashboard
 
-![Dashboard](screenshots/dashboard.JPG)
+![Dashboard](Screenshots/dashboard.JPG)
 
-![Cohort retention](screenshots/retention.JPG)
+![Cohort retention](Screenshots/retention.JPG)
 
 ---
 
